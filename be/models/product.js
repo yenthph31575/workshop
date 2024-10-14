@@ -1,6 +1,5 @@
-import mongoose, { version } from "mongoose";
+import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
-import slugify from "slugify";
 
 const ProductSchema = new mongoose.Schema(
     {
@@ -8,7 +7,7 @@ const ProductSchema = new mongoose.Schema(
             type: String,
             required: true,
             minlength: 3,
-            unique: true,
+            unique: true, // Đảm bảo tính duy nhất
         },
         slug: {
             type: String,
@@ -61,14 +60,6 @@ const ProductSchema = new mongoose.Schema(
     },
     { timestamps: true, versionKey: false }
 );
-
-// Middleware để tự động tạo slug từ tên sản phẩm
-ProductSchema.pre("save", function (next) {
-    if (this.isModified("name")) {
-        this.slug = slugify(this.name, { lower: true, strict: true });
-    }
-    next();
-});
 
 ProductSchema.plugin(mongoosePaginate);
 
